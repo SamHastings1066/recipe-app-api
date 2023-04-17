@@ -1,0 +1,36 @@
+# This file configures our github actions
+# We've called it "checks" because it's going to run jobs that perform various
+# checks on our code.
+---
+name: Checks # the name as it appears in github actions
+
+on: [push] # this is the trigger. this workflow runs on github pushes
+
+jobs:
+  test-lint: # job id - may be references elsewhere in this github actions e.g. to ensure the order of the jobs is run in a partic order
+    name: Test and Lint # this is the name we will see in the github actions interface
+    runs-on: ubuntu-20.04 # This is the OS that the jobs run on on github.
+    steps:
+      - name: Login to Docker Hub # name in github actions interface
+        # 'uses' allows you to use another pre-made action provided in the
+        # github actions repo. An action is just a docker container and a docker
+        # configuration that is set up to perform a certain task
+        # the task below is the docker login action. The @ symbol specifies the
+        # version of the action that we want to use
+        uses: docker/login-action@v1
+        # we pass in the parameters to the above docker login action
+        with:
+          username: "${{ secrets.DOCKERHUB_USER }}"
+          password: "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Checkout
+        # checkout is an action provided by github to check our code out inside
+        # our github actions job. The code is not checked out by default inside
+        # the job we are running. We need to access the code to run tests and
+        # linting.
+        uses: actions/checkout@v2
+      - name: Test
+        # The cmmand that runs the unit tests on our project
+        run: docker compose run --rm app sh -c "python manage.py test"
+      - name: Lint
+        # run the flake8 linting
+        run: docker compose run --rm app sh -c "flake8"
