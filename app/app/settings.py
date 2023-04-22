@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'rest_framework',
+    'drf_spectacular',
+    'user', # adds our user app
 ]
 
 MIDDLEWARE = [
@@ -132,3 +135,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Define our custom user model. Set the Auth_User_model configuration, tell
 # it to use core.User out of all the models defined in our core app.
 AUTH_USER_MODEL = 'core.User'
+
+# Configure Django rest framework to use the drf_spectacular.openapi.AutoSchema
+# to generate the schema
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
