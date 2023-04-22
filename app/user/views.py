@@ -7,7 +7,7 @@ Views for the user API.
 # way. We can also override some of that behaviour.
 from rest_framework import generics
 
-from user.serializer import UserSerializer
+from user.serializers import UserSerializer
 
 
 # The CreateAPIView base class from generics handles HTTP post requests
